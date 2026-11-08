@@ -57,11 +57,17 @@ Notes for use with this plugin:
 
 Order matters: the plugin file must be on the printer before the config mentions `[cpap_flap]`, or Klipper won't start.
 
-1. **Copy the plugin** to the printer:
+1. **Install the plugin and the config block.** Run this on the printer (over SSH). It clones this repository to
+   `~/cpap-flap`, links the plugin into Kalico's plugin folder and copies the config block into your config folder:
    ```bash
-   scp cpap_flap.py pi@<printer>:~/klipper/klippy/plugins/cpap_flap.py
+   cd ~ && git clone https://github.com/jaak0b/cpap-flap.git && ln -sf ~/cpap-flap/cpap_flap.py ~/klipper/klippy/plugins/cpap_flap.py && cp -n ~/cpap-flap/printer_cfg_flap_block.cfg ~/printer_data/config/
    ```
-2. **Copy `printer_cfg_flap_block.cfg`** into your config folder (e.g. upload it in Mainsail) and add to `printer.cfg`:
+   The plugin is a link, so an update is a pull followed by a Klipper restart:
+   ```bash
+   cd ~/cpap-flap && git pull && sudo systemctl restart klipper
+   ```
+   The config block is a copy that you may edit, so an update never overwrites it (`cp -n` also skips an existing file).
+2. **Include the config block** in `printer.cfg`:
    ```ini
    [include printer_cfg_flap_block.cfg]
    ```
